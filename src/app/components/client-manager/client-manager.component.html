@@ -1,3 +1,92 @@
-<p>
-  client-manager works!
-</p>
+<mat-card>
+  <mat-card-header> <mat-card-title>Clients</mat-card-title> </mat-card-header>
+  <form [formGroup]="clientForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Enter Client Name" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>CPF/CNPJ</mat-label>
+      <input matInput placeholder="CPF/CNPJ" formControlName="cpfCnpj" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Date of Birth</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Choose a date"
+        formControlName="birthDate"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Person Type</mat-label>
+      <mat-select placeholder="Select" formControlName="personType">
+        <mat-option value="F">F</mat-option>
+        <mat-option value="J">J</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!clientForm.valid"
+      (click)="performAction()"
+    >
+      {{ buttonAction }}
+    </button>
+
+    <button [hidden]="!isEditing" mat-raised-button (click)="cancel()">
+      Cancel
+    </button>
+  </form>
+
+  <mat-form-field class="filter" appearance="outline">
+    <input
+      matInput
+      (keyup)="applyFilter($event.target.value)"
+      placeholder="Filter"
+    />
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let client">{{ client.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="birthDate">
+      <th mat-header-cell *matHeaderCellDef>Date Of Birth</th>
+      <td mat-cell *matCellDef="let client">
+        {{ client.birthDate | date: "mediumDate" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cpfCnpj">
+      <th mat-header-cell *matHeaderCellDef>CPF/CNPJ</th>
+      <td mat-cell *matCellDef="let client">{{ client.cpfCnpj }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="personType">
+      <th mat-header-cell *matHeaderCellDef>Person Type</th>
+      <td mat-cell *matCellDef="let client">{{ client.personType }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let client">
+        <i class="material-icons" (click)="loadClient(client.id)"> edit </i>
+        <i class="material-icons" (click)="delete(client.id)">
+          delete_outline
+        </i>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-card>
