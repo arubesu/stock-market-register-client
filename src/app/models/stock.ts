@@ -1,6 +1,6 @@
 export class Stock {
   id: string;
   code: string;
-  value: number;
+  price: number;
   date: Date;
 }
