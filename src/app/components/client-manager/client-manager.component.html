@@ -8,7 +8,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>CPF/CNPJ</mat-label>
-      <input matInput placeholder="CPF/CNPJ" formControlName="cpfCnpj" />
+      <input matInput placeholder="CPF/CNPJ" formControlName="cpfCnpj" maxlength="14"/>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -26,8 +26,8 @@
     <mat-form-field appearance="outline">
       <mat-label>Person Type</mat-label>
       <mat-select placeholder="Select" formControlName="personType">
-        <mat-option value="F">F</mat-option>
-        <mat-option value="J">J</mat-option>
+        <mat-option value="F">Pessoa Física</mat-option>
+        <mat-option value="J">Pessoa Jurídica</mat-option>
       </mat-select>
     </mat-form-field>
 
