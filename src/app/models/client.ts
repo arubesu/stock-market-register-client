@@ -1,7 +1,7 @@
 export class Client {
   id: string;
   name: string;
-  birthDate: Date;
+  birthDate: any;
   cpfCnpj: string;
   personType: string;
 }

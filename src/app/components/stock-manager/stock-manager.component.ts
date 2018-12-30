@@ -3,7 +3,8 @@ import { StockService } from 'src/app/services/stock.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { Stock } from 'src/app/models/stock';
-import moment from 'moment';
+import * as moment from 'moment';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-stock-manager',
@@ -31,7 +32,8 @@ export class StockManagerComponent implements OnInit {
 
   stocks: Stock[];
 
-  constructor(private stockService: StockService) {}
+  constructor(private stockService: StockService,
+    private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.getStocks();
@@ -41,6 +43,9 @@ export class StockManagerComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  getErrorMessage() {
+    return 'You must enter a value';
+  }
 
   saveStock() {
     const stock: Stock = new Stock();
@@ -48,6 +53,7 @@ export class StockManagerComponent implements OnInit {
     this.stockService.addStock(stock).subscribe(() => {
       this.clearFields();
       this.getStocks();
+      this.notificationService.showSuccess('stock added successfully');
     });
   }
 
@@ -66,6 +72,7 @@ export class StockManagerComponent implements OnInit {
       this.getStocks();
       this.isEditing = false;
       this.changeButtonTitle();
+      this.notificationService.showSuccess('stock edited successfully');
     });
   }
 
@@ -113,6 +120,7 @@ export class StockManagerComponent implements OnInit {
   delete(id: string) {
     return this.stockService.deleteStock(id).subscribe(() => {
       this.getStocks();
+      this.notificationService.showSuccess('stock deleted successfully');
     });
   }
 }

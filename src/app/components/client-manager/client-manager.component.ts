@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { ClientService } from 'src/app/services/client.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { Client } from 'src/app/models/client';
-import moment from 'moment';
+import * as moment from 'moment';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-client-manager',
@@ -37,7 +38,10 @@ export class ClientManagerComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  constructor(private clientService: ClientService) {}
+  constructor(
+    private clientService: ClientService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
     this.getClients();
@@ -49,7 +53,12 @@ export class ClientManagerComponent implements OnInit {
     this.clientService.addClient(client).subscribe(() => {
       this.clearFields();
       this.getClients();
+      this.notificationService.showSuccess('Client added successfully!')
     });
+  }
+
+  getErrorMessage() {
+    return 'You must enter a value';
   }
 
   performAction() {
@@ -67,6 +76,7 @@ export class ClientManagerComponent implements OnInit {
       this.getClients();
       this.isEditing = false;
       this.changeButtonTitle();
+      this.notificationService.showSuccess('Client edited successfully!')
     });
   }
 
@@ -116,6 +126,7 @@ export class ClientManagerComponent implements OnInit {
   delete(id: string) {
     return this.clientService.deleteClient(id).subscribe(() => {
       this.getClients();
+      this.notificationService.showSuccess('Client deleted successfully!')
     });
   }
 }

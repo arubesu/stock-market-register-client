@@ -4,11 +4,21 @@
     <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput placeholder="Enter Client Name" formControlName="name" />
+      <mat-error *ngIf="clientForm.controls['name'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>CPF/CNPJ</mat-label>
-      <input matInput placeholder="CPF/CNPJ" formControlName="cpfCnpj" maxlength="14"/>
+      <input
+        mask-number
+        [mask]="'99999999999999'"
+        type="text"
+        matInput
+        placeholder="CPF/CNPJ"
+        formControlName="cpfCnpj"
+      />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -19,6 +29,9 @@
         placeholder="Choose a date"
         formControlName="birthDate"
       />
+      <mat-error *ngIf="clientForm.controls['birthDate'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -29,6 +42,9 @@
         <mat-option value="F">Pessoa Física</mat-option>
         <mat-option value="J">Pessoa Jurídica</mat-option>
       </mat-select>
+      <mat-error *ngIf="clientForm.controls['birthDate'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
     </mat-form-field>
 
     <button
