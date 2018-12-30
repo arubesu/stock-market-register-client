@@ -3,11 +3,11 @@ import { Client } from './client';
 export class Order {
   id: string;
   type: string;
-  orderDate: Date;
-  client: Client;
+  orderDate: any;
+  clientId: string;
   stockCode: string;
   stockAmount: string;
-  buyDate: Date;
+  buyDate: any;
   orderValue: number;
   brokerageFee: number;
   incomeTax: number;

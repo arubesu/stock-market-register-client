@@ -1,3 +1,164 @@
-<p>
-  order-manager works!
-</p>
+<mat-card>
+  <mat-card-header> <mat-card-title>Orders</mat-card-title> </mat-card-header>
+  <form [formGroup]="orderForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Order Type</mat-label>
+      <mat-select
+        placeholder="Select"
+        formControlName="type"
+        (selectionChange)="disableBuyDateField($event)"
+      >
+        <mat-option value="C">Compra</mat-option>
+        <mat-option value="V">Venda</mat-option>
+      </mat-select>
+      <mat-error *ngIf="orderForm.controls['type'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Order Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker1"
+        placeholder="Choose a date"
+        formControlName="orderDate"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+      <mat-error *ngIf="orderForm.controls['orderDate'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Client</mat-label>
+      <mat-select placeholder="Select" formControlName="clientId">
+        <mat-option *ngFor="let client of clients" [value]="client.id">{{
+          client.name
+        }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="orderForm.controls['clientId'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Stock Code</mat-label>
+      <input
+        matInput
+        placeholder="Stock Code"
+        formControlName="stockCode"
+        maxlength="10"
+      />
+      <mat-error *ngIf="orderForm.controls['stockCode'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Stock Amount</mat-label>
+      <input
+        matInput
+        placeholder="Stock Amount"
+        formControlName="stockAmount"
+      />
+      <mat-error *ngIf="orderForm.controls['stockAmount'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="!isOrderTypeBuy">
+      <mat-label>Buy Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker2"
+        placeholder="Choose a date"
+        formControlName="buyDate"
+        [max]="maxDate"
+      />
+      <mat-error *ngIf="orderForm.controls['buyDate'].invalid">{{
+        getErrorMessage()
+      }}</mat-error>
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!orderForm.valid"
+      (click)="saveOrder()"
+    >
+      Save
+    </button>
+  </form>
+
+  <mat-form-field class="filter" appearance="outline">
+    <input
+      matInput
+      (keyup)="applyFilter($event.target.value)"
+      placeholder="Filter"
+    />
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Order Type</th>
+      <td mat-cell *matCellDef="let order">{{ order.type }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderDate">
+      <th mat-header-cell *matHeaderCellDef>Order Date</th>
+      <td mat-cell *matCellDef="let order">
+        {{ order.orderDate | date: "mediumDate" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="client">
+      <th mat-header-cell *matHeaderCellDef>Client</th>
+      <td mat-cell *matCellDef="let order">{{ order.clientId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="stockCode">
+      <th mat-header-cell *matHeaderCellDef>Stock Code</th>
+      <td mat-cell *matCellDef="let order">{{ order.stockCode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="stockAmount">
+      <th mat-header-cell *matHeaderCellDef>Stock Amount</th>
+      <td mat-cell *matCellDef="let order">{{ order.stockAmount }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="buyDate">
+      <th mat-header-cell *matHeaderCellDef>Buy Date</th>
+      <td mat-cell *matCellDef="let order">
+        {{ order.buyDate | date: "mediumDate" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderValue">
+      <th mat-header-cell *matHeaderCellDef>Order Price</th>
+      <td mat-cell *matCellDef="let order">
+        {{ order.orderValue | currency: "BRL" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="brokerageFee">
+      <th mat-header-cell *matHeaderCellDef>Brokerage Fee</th>
+      <td mat-cell *matCellDef="let order">
+        {{ order.brokerageFee | currency: "BRL" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="incomeTax">
+      <th mat-header-cell *matHeaderCellDef>Income Tax</th>
+      <td mat-cell *matCellDef="let order">
+        {{ order.incomeTax | currency: "BRL" }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-card>
