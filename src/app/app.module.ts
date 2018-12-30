@@ -20,7 +20,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
-
+import { MaskModule } from 'soft-angular-mask';
+import { ToastrModule } from 'ng6-toastr-notifications';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +46,9 @@ import {MatTableModule} from '@angular/material/table';
     ReactiveFormsModule,
     HttpModule,
     HttpClientModule,
-    MatTableModule
+    MatTableModule,
+    MaskModule,
+    ToastrModule.forRoot()
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent]
